@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %} homepage {% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #282c35;
+            color: #fff;
+            align-items: center;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        header {
+            background-color: #1e2229;
+            text-align: center;
+            padding: 1em;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #373c49;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        footer {
+            background-color: #1e2229;
+            color: blue;
+            text-align: center;
+            padding: 0em 0;
+            position: fixed;
+            bottom: 0;
+            width: 65%;
+        }
+
+        a:hover {
+            color: rgb(171, 17, 17);
+        }
+
+        a {
+            color: orange;
+        }
+
+        h1 {
+            line-height: 1.7;
+            color: aqua;
+        }
+
+        h2 {
+            color: royalblue;
+            line-height: 1.7;
+        }
+
+    </style>
+</head>
+<body>
+    <section>
+        <div class="container">
+            <h1 align="center">Events Organiser</h1>
+            <hr>
+            <p><a href="{% url 'event' %}">Create new event</a></p>
+            <hr>
+            <section>
+                {% if upcoming_event %}
+                    <h2>{{ upcoming_event.name }}</h2>
+                    <p>Event starts at: {{ upcoming_event.event_datetime }}</p>
+                    <p id="countdown"></p>
+                    <script>
+                        function startCountdown(eventDateTime) {
+                            var countDownDate = new Date(eventDateTime).getTime();
+                            var x = setInterval(function() {
+                                var now = new Date().getTime();
+                                var distance = countDownDate - now;
+                                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+                                document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
+                                + minutes + "m " + seconds + "s ";
+        
+                                if (distance < 0) {
+                                    clearInterval(x);
+                                    document.getElementById("countdown").innerHTML = "EXPIRED";
+                                }
+                            }, 1000);
+                        }
+        
+                        // Initialize the countdown with the event datetime
+                        startCountdown("{{ upcoming_event.event_datetime|date:'Y-m-d H:i:s' }}");
+                    </script>
+                {% else %}
+                    <p>No upcoming events.</p>
+                {% endif %}
+            </section>
+            <section>
+                <h2 align="center">Upcoming Events</h2>
+                <hr><hr>
+                <ol>
+                    {% for event in upcoming_events %}
+                        <li>{{ event.name }} - {{ event.event_datetime }}</li>
+                    {% endfor %}
+                </ol>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Dev_aladinh production</p>
+        </footer>
+
+    </section>
+</body>
+</html>
+{% endblock %}

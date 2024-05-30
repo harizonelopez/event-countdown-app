@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %} {{ event.name }} {% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #282c35;
+            color: #fff;
+            align-items: center;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        header {
+            background-color: #1e2229;
+            text-align: center;
+            padding: 1em;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #373c49;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        footer {
+            background-color: #1e2229;
+            color: blue;
+            text-align: center;
+            padding: 0em 0;
+            position: fixed;
+            bottom: 0;
+            width: 65%;
+        }
+
+        a:hover {
+            color: rgb(171, 17, 17);
+        }
+
+        a {
+            color: orange;
+        }
+
+        h1 {
+            line-height: 1.7;
+            color: aqua;
+        }
+
+    </style>
+</head>
+<body>
+    <section>
+        <h1 align="center">{{ event.name }}</h1>
+        <hr><hr>
+        <section>
+            <div class="form-group">
+                <form method="POST">
+                    {% csrf_token %}
+                    <label for="event_name">Event Name:</label><br>
+                    <input 
+                        type="text" 
+                        id="event_name" 
+                        class="form-control"
+                        name="event_name" required
+                        placeholder="Enter event name"><br>
+                    <label for="event_datetime">Event Date-time:</label><br>
+                    <input 
+                        type="datetime-local" 
+                        id="event_datetime" 
+                        class="form-control"
+                        name="event_datetime" requiredufa
+                        placeholder="Event date"><br>
+
+                    <button type="submit" class=" btn btn-success">Create Event</button>
+                </form>
+            </div>
+        </section>
+
+        <h6 align="center"><button class="btn-secondary"><a href="{% url 'home' %}">Home</a></button></h6>
+
+        <footer>
+            <p>&copy; 2024 Dev_aladinh production</p>
+        </footer>
+        
+    </section>
+</body>
+</html>
+{% endblock %}
