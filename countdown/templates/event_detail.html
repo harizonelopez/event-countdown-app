@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} {{ event.name }} {% endblock %}
+{% block title %} events page {% endblock %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -83,12 +83,12 @@
                         name="event_datetime" requiredufa
                         placeholder="Event date"><br>
 
-                    <button type="submit" class=" btn btn-success">Create Event</button>
+                    <button type="submit" class=" btn btn-success">Create event</button>
                 </form>
             </div>
         </section>
 
-        <h6 align="center"><button class="btn-secondary"><a href="{% url 'home' %}">Home</a></button></h6>
+        <h6 align="center"><button class="btn btn-secondary"><a href="{% url 'home' %}">Home</a></button></h6>
 
         <footer>
             <p>&copy; 2024 Dev_aladinh production</p>

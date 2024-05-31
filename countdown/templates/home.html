@@ -7,6 +7,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        function startCountdown(id, eventDateTime) {
+            var countDownDate = new Date(eventDateTime).getTime();
+            var x = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("countdown-" + id).innerHTML = days + "d " + hours + "h "
+                    + minutes + "m " + seconds + "s ";
+
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("countdown-" + id).innerHTML = "EXPIRED";
+                }
+            }, 1000);
+        }
+
+        window.onload = function() {
+            var events = JSON.parse('{{ events_json|escapejs }}');
+            events.forEach(event => {
+                startCountdown(event.id, event.event_datetime);
+            });
+        }
+    </script>
     <style>
         body {
             display: flex;
@@ -59,8 +87,17 @@
         }
 
         h2 {
-            color: royalblue;
+            color: rgb(225, 65, 158);
             line-height: 1.7;
+        }
+
+        h3 {
+            color: rgb(20, 16, 234);
+            line-height: 1.5;
+        }
+
+        h5 {
+            color: rgb(17, 228, 52);
         }
 
     </style>
@@ -69,50 +106,20 @@
     <section>
         <div class="container">
             <h1 align="center">Events Organiser</h1>
-            <hr>
-            <p><a href="{% url 'event' %}">Create new event</a></p>
-            <hr>
-            <section>
-                {% if upcoming_event %}
-                    <h2>{{ upcoming_event.name }}</h2>
-                    <p>Event starts at: {{ upcoming_event.event_datetime }}</p>
-                    <p id="countdown"></p>
-                    <script>
-                        function startCountdown(eventDateTime) {
-                            var countDownDate = new Date(eventDateTime).getTime();
-                            var x = setInterval(function() {
-                                var now = new Date().getTime();
-                                var distance = countDownDate - now;
-                                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-                                document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
-                                + minutes + "m " + seconds + "s ";
-        
-                                if (distance < 0) {
-                                    clearInterval(x);
-                                    document.getElementById("countdown").innerHTML = "EXPIRED";
-                                }
-                            }, 1000);
-                        }
-        
-                        // Initialize the countdown with the event datetime
-                        startCountdown("{{ upcoming_event.event_datetime|date:'Y-m-d H:i:s' }}");
-                    </script>
-                {% else %}
-                    <p>No upcoming events.</p>
-                {% endif %}
-            </section>
+            <hr><hr>
             <section>
                 <h2 align="center">Upcoming Events</h2>
-                <hr><hr>
-                <ol>
-                    {% for event in upcoming_events %}
-                        <li>{{ event.name }} - {{ event.event_datetime }}</li>
-                    {% endfor %}
-                </ol>
+                <hr>
+                <p><a href="{% url 'event' %}">Create new event</a></p>
+                <hr>
+                {% for event in upcoming_events %}
+                <section>
+                    <h3>{{ event.name }}</h3>
+                    <p>Event starts at: {{ event.event_datetime }}</p>
+                    <h5 id="countdown-{{ event.id }}"></h5>
+                    <button class="btn btn-danger"><a href="{% url 'delete_event' event.id %}">Delete</a></button>
+                </section>
+                {% endfor %}
             </section>
         </div>
 
