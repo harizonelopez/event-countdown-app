@@ -30,7 +30,6 @@
                 <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
                 <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
                 </svg>    Home</a>
-            <!--<a class="nav-item nav-link" id="event" href="/event">New event</a>-->
         </div>
       </div>
     </nav>
@@ -45,16 +44,46 @@
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
       crossorigin="anonymous">
     </script>
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
       crossorigin="anonymous">
     </script>
+
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous">
     </script>
-    
+
+    <script>
+      function startCountdown(id, eventDateTime) {
+          var countDownDate = new Date(eventDateTime).getTime();
+          var x = setInterval(function() {
+              var now = new Date().getTime();
+              var distance = countDownDate - now;
+              var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+              document.getElementById("countdown-" + id).innerHTML = days + "d " + hours + "h "
+                  + minutes + "m " + seconds + "s ";
+
+              if (distance < 0) {
+                  clearInterval(x);
+                  document.getElementById("countdown-" + id).innerHTML = "EXPIRED";
+              }
+          }, 1000);
+      }
+
+      window.onload = function() {
+          var events = JSON.parse('{{ events_json|escapejs }}');
+          events.forEach(event => {
+              startCountdown(event.id, event.event_datetime);
+          });
+      }
+    </script>
   </body>
 </html>
