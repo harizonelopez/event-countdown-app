@@ -9,12 +9,10 @@ def home(request):
     events_json = json.dumps(list(upcoming_events.values('id', 'event_datetime')), cls=DjangoJSONEncoder)
     return render(request, 'home.html', {'upcoming_events': upcoming_events, 'events_json': events_json})
 
-
 def event_detail(request):
     if request.method == 'POST':
         event_name = request.POST.get('event_name')
         event_datetime = request.POST.get('event_datetime')
-
         event = Event.objects.create(name=event_name, event_datetime=event_datetime)
         return redirect('home')
     

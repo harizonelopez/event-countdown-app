@@ -36,7 +36,6 @@ A Django web application that allows users to create events and displays a count
 
 ```sh
  pip install django
- pip install -r requirements.txt
 ```
 
 ### 4. Apply Migrations
