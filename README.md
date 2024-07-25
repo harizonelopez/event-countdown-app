@@ -12,7 +12,7 @@ A Django web application that allows users to create events and displays a count
 
 ## Requirements
 
-- Python 3.x
+- Python 3.x or later
 - Django 3.x or later
 
 
