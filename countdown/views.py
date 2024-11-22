@@ -3,6 +3,7 @@ from .models import Event
 from django.utils import timezone
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+from django.urls import reverse
 
 def home(request):
     now = timezone.localtime(timezone.now())
@@ -10,7 +11,7 @@ def home(request):
     upcoming_events = Event.objects.filter(event_datetime__gte=now).order_by('event_datetime')
 
     events_json = json.dumps(
-        list(upcoming_events.values('id', 'event_datetime')),
+        list(upcoming_events.values('id', 'name', 'event_datetime')),
         cls=DjangoJSONEncoder
     )
 
@@ -24,7 +25,7 @@ def event_detail(request):
         event_datetime = timezone.make_aware(timezone.datetime.fromisoformat(event_datetime))
 
         Event.objects.create(name=event_name, event_datetime=event_datetime)
-        return redirect('home')
+        return redirect(reverse('home'))
     
     return render(request, 'event_detail.html')
 
