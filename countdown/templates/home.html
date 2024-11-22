@@ -2,11 +2,7 @@
 {% block title %} homepage {% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             display: flex;
@@ -80,15 +76,16 @@
             <h1 align="center">Events Organiser</h1>
             <hr><hr>
             <section>
-                <h2 align="center">Upcoming Events</h2>
-                <hr>
                 <p><a href="{% url 'event' %}">Create new event</a></p>
+                <hr>
+                <h2 align="center">Upcoming Events</h2>
                 <hr>
                 {% for event in upcoming_events %}
                 <section>
                     <h3>{{ event.name }}</h3>
+                    <hr>
                     <p>Event starts at: {{ event.event_datetime }}</p>
-                    <h5 id="countdown-{{ event.id }}"></h5>
+                    <h1 id="countdown-{{ event.id }}"></h1>
                     <button class="btn btn-danger"><a href="{% url 'delete_event' event.id %}">Delete</a></button>
                 </section>
                 {% endfor %}
@@ -101,5 +98,4 @@
 
     </section>
 </body>
-</html>
 {% endblock %}

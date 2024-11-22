@@ -21,7 +21,7 @@ A Django web application that allows users to create events and displays a count
 ### 1. Clone the Repository
 
 ```sh
- git clone https://github.com/yourusername/django-event-countdown.git
+ git clone https://github.com/harizonelopez/django-event-countdown.git
  cd django-event-countdown
 ```
 

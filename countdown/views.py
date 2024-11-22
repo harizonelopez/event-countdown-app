@@ -5,15 +5,25 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 
 def home(request):
-    upcoming_events = Event.objects.filter(event_datetime__gte=timezone.now()).order_by('event_datetime')
-    events_json = json.dumps(list(upcoming_events.values('id', 'event_datetime')), cls=DjangoJSONEncoder)
+    now = timezone.localtime(timezone.now())
+
+    upcoming_events = Event.objects.filter(event_datetime__gte=now).order_by('event_datetime')
+
+    events_json = json.dumps(
+        list(upcoming_events.values('id', 'event_datetime')),
+        cls=DjangoJSONEncoder
+    )
+
     return render(request, 'home.html', {'upcoming_events': upcoming_events, 'events_json': events_json})
 
 def event_detail(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         event_name = request.POST.get('event_name')
         event_datetime = request.POST.get('event_datetime')
-        event = Event.objects.create(name=event_name, event_datetime=event_datetime)
+
+        event_datetime = timezone.make_aware(timezone.datetime.fromisoformat(event_datetime))
+
+        Event.objects.create(name=event_name, event_datetime=event_datetime)
         return redirect('home')
     
     return render(request, 'event_detail.html')
