@@ -51,13 +51,13 @@ A Django web application that allows users to create events and displays a count
  python manage.py createsuperuser
 ```
 
-### 6. Run Development Server
+### 6. Run Development Server in your terminal
 
 ```sh
  python manage.py runserver
 ``` 
 
-### 7. Access the Application
+### 7. Access the Application in your browser
 
 ```sh
  Open web browser and go to `http://127.0.0.1:8000`.
